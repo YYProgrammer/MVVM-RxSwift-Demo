@@ -12,11 +12,10 @@
 		BC1DF39A211400A500AAC190 /* UIImage+YYCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC1DF397211400A500AAC190 /* UIImage+YYCategory.swift */; };
 		BC1DF39B211400A500AAC190 /* YYUtilsMacro.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC1DF398211400A500AAC190 /* YYUtilsMacro.swift */; };
 		BC1DF39C211400A500AAC190 /* UIView+YYExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC1DF399211400A500AAC190 /* UIView+YYExtension.swift */; };
-		BC1DF3A8211400D000AAC190 /* ValidateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC1DF3A0211400D000AAC190 /* ValidateManager.swift */; };
-		BC1DF3A9211400D000AAC190 /* FirstViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC1DF3A1211400D000AAC190 /* FirstViewModel.swift */; };
-		BC1DF3AA211400D000AAC190 /* FirstApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC1DF3A2211400D000AAC190 /* FirstApi.swift */; };
 		BC1DF3AB211400D000AAC190 /* TipTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC1DF3A4211400D000AAC190 /* TipTextField.swift */; };
 		BC1DF3AC211400D000AAC190 /* FirstViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC1DF3A6211400D000AAC190 /* FirstViewController.swift */; };
+		BC42F5A82117D75800948806 /* FirstDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC42F5A72117D75800948806 /* FirstDataModel.swift */; };
+		BC42F5AA2117DAF100948806 /* FirstViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC42F5A92117DAF100948806 /* FirstViewModel.swift */; };
 		BC9BEF8E2111530C00C56734 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BC9BEF232111530B00C56734 /* Assets.xcassets */; };
 		BC9BEF8F2111530C00C56734 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BC9BEF242111530B00C56734 /* LaunchScreen.storyboard */; };
 		BC9BEF912111530C00C56734 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = BC9BEF282111530B00C56734 /* Info.plist */; };
@@ -29,11 +28,10 @@
 		BC1DF397211400A500AAC190 /* UIImage+YYCategory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+YYCategory.swift"; sourceTree = "<group>"; };
 		BC1DF398211400A500AAC190 /* YYUtilsMacro.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YYUtilsMacro.swift; sourceTree = "<group>"; };
 		BC1DF399211400A500AAC190 /* UIView+YYExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+YYExtension.swift"; sourceTree = "<group>"; };
-		BC1DF3A0211400D000AAC190 /* ValidateManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ValidateManager.swift; sourceTree = "<group>"; };
-		BC1DF3A1211400D000AAC190 /* FirstViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirstViewModel.swift; sourceTree = "<group>"; };
-		BC1DF3A2211400D000AAC190 /* FirstApi.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirstApi.swift; sourceTree = "<group>"; };
 		BC1DF3A4211400D000AAC190 /* TipTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TipTextField.swift; sourceTree = "<group>"; };
 		BC1DF3A6211400D000AAC190 /* FirstViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirstViewController.swift; sourceTree = "<group>"; };
+		BC42F5A72117D75800948806 /* FirstDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstDataModel.swift; sourceTree = "<group>"; };
+		BC42F5A92117DAF100948806 /* FirstViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstViewModel.swift; sourceTree = "<group>"; };
 		BC9BEE34211151FA00C56734 /* MVVMSwiftDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MVVMSwiftDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BC9BEF232111530B00C56734 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		BC9BEF252111530B00C56734 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -80,19 +78,10 @@
 			path = Utils;
 			sourceTree = "<group>";
 		};
-		BC1DF39D211400D000AAC190 /* Model */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Model;
-			sourceTree = "<group>";
-		};
 		BC1DF39F211400D000AAC190 /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
-				BC1DF3A0211400D000AAC190 /* ValidateManager.swift */,
-				BC1DF3A1211400D000AAC190 /* FirstViewModel.swift */,
-				BC1DF3A2211400D000AAC190 /* FirstApi.swift */,
+				BC42F5A92117DAF100948806 /* FirstViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -111,6 +100,14 @@
 				BC1DF3A6211400D000AAC190 /* FirstViewController.swift */,
 			);
 			path = Controller;
+			sourceTree = "<group>";
+		};
+		BC42F5A62117D74A00948806 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				BC42F5A72117D75800948806 /* FirstDataModel.swift */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 		BC9BEE2B211151FA00C56734 = {
@@ -146,7 +143,7 @@
 			isa = PBXGroup;
 			children = (
 				BC1DF3A5211400D000AAC190 /* Controller */,
-				BC1DF39D211400D000AAC190 /* Model */,
+				BC42F5A62117D74A00948806 /* Model */,
 				BC1DF3A3211400D000AAC190 /* View */,
 				BC1DF39F211400D000AAC190 /* ViewModel */,
 			);
@@ -289,12 +286,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				BC1DF39B211400A500AAC190 /* YYUtilsMacro.swift in Sources */,
-				BC1DF3A8211400D000AAC190 /* ValidateManager.swift in Sources */,
+				BC42F5A82117D75800948806 /* FirstDataModel.swift in Sources */,
+				BC42F5AA2117DAF100948806 /* FirstViewModel.swift in Sources */,
 				BC1DF3952113FF8F00AAC190 /* AppDelegate.swift in Sources */,
-				BC1DF3AA211400D000AAC190 /* FirstApi.swift in Sources */,
 				BC1DF39A211400A500AAC190 /* UIImage+YYCategory.swift in Sources */,
 				BC1DF3AC211400D000AAC190 /* FirstViewController.swift in Sources */,
-				BC1DF3A9211400D000AAC190 /* FirstViewModel.swift in Sources */,
 				BC1DF3AB211400D000AAC190 /* TipTextField.swift in Sources */,
 				BC1DF39C211400A500AAC190 /* UIView+YYExtension.swift in Sources */,
 			);

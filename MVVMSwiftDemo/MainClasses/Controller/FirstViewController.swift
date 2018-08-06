@@ -11,11 +11,6 @@ import RxSwift
 
 class FirstViewController: UIViewController {
 
-    
-
-    // 取消订阅的标记，可以写到父类里
-    var disposeBag = DisposeBag()
-
     // MARK: 界面组件
     private lazy var nameTextField: TipTextField = {
         let textfield = TipTextField.init(frame: CGRect.init(x: 0, y: 0, width: kMainScreenWidth, height: 70.0), placeHolder: "输入姓名")
@@ -34,6 +29,9 @@ class FirstViewController: UIViewController {
         return button
     }()
 
+    // MARK: viewModel
+    var viewModel: FirstViewModel?
+
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor.white
@@ -45,37 +43,11 @@ class FirstViewController: UIViewController {
         nameTextField.yy_y = STATUS_HEIGHT + 20.0
         pwdTextField.yy_y = nameTextField.yy_bottom + 10.0
         loginButton.yy_y = pwdTextField.yy_bottom + 40.0
-
         //绑定viewModel
-        let viewModel = FirstViewModel.init(input: (username: nameTextField.textField.rx.text.orEmpty.asDriver(),
-                                                    password: pwdTextField.textField.rx.text.orEmpty.asDriver(),
-                                                    loginTaps: loginButton.rx.tap.asDriver()),
-                                            validateManager: ValidateManager.sharedManager)
-
-        viewModel.validatedUsername
-            .drive(nameTextField.tipLabel.rx.validationResult)
-            .disposed(by: disposeBag)
-
-        viewModel.validatedPassword
-            .drive(pwdTextField.tipLabel.rx.validationResult)
-            .disposed(by: disposeBag)
-
-        viewModel.signupEnabled
-            .drive(loginButton.rx.isEnabled)
-            .disposed(by: disposeBag)
-
-//        viewModel.login.drive(onNext: { [unowned self] (login) in
-//            if !login {
-//                self.loginButton.setTitle("登录失败，请重新登录", for: .normal)
-//            } else {
-//                self.loginButton.setTitle("登录成功", for: .disabled)
-//                self.loginButton.isEnabled = false
-//            }
-//        }).disposed(by: disposeBag)
-        viewModel.login
-            .drive(loginButton.rx.loginResult)
-            .disposed(by: disposeBag)
+        viewModel = FirstViewModel.init(nameTextField: nameTextField, pwdTextField: pwdTextField, loginButton: loginButton)
     }
 
-
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        dismiss(animated: true, completion: nil)
+    }
 }

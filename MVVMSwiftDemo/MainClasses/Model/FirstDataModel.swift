@@ -1,12 +1,14 @@
 //
-//  ValidateManager.swift
+//  FirstDataModel.swift
 //  MVVMSwiftDemo
 //
-//  Created by yuyou on 2018/8/2.
+//  Created by yuyou on 2018/8/6.
 //  Copyright © 2018年 yy. All rights reserved.
 //
 
 import UIKit
+import RxSwift
+import Alamofire
 
 enum ValidationResult {
     case ok(message: String)
@@ -23,43 +25,38 @@ extension ValidationResult {
             return false
         }
     }
-
-    var textColor: UIColor {
-        switch self {
-        case .ok:
-            return UIColor.green
-        case .empty:
-            return UIColor.black
-        case .failed:
-            return UIColor.red
-        }
-    }
-
-    var description: String {
-        switch self {
-        case let .ok(message):
-            return message
-        case .empty:
-            return ""
-        case let .failed(message):
-            return message
-        }
-    }
 }
 
-class ValidateManager {
+class FirstDataModel: NSObject {
 
-    static let sharedManager = ValidateManager() // 单粒
+    var userName: String = "" // 用户名
+    var password: String = "" // 密码
 
-    let minPasswordCount = 5
+    let minPasswordCount = 5 // 密码最少位数
 
-    func validateUsername(username: String) -> ValidationResult { // 用户名验证
-        if username.count == 0 {
+    func doLogin() -> Observable<Bool> { // 执行登录请求
+        print(userName + "  " + password)
+        return Observable.create({ (observer) -> Disposable in
+            // 随便请求一个网站用于测试
+            Alamofire.request("http://www.baidu.com", method: .get, parameters: nil, encoding: JSONEncoding.default, headers: nil).response(completionHandler: { (response) in
+                if let error = response.error {
+                    observer.onError(error)
+                } else {
+                    observer.onNext(true)
+                }
+                observer.onCompleted()
+            })
+            return Disposables.create()
+        })
+    }
+
+    func validateUsername() -> ValidationResult { // 用户名验证
+        if userName.count == 0 {
             return .empty
         }
         var haveLetter = false
         var haveNumber = false
-        for c in username {
+        for c in userName {
             var intFromCharacter:Int = 0 //字符转ascii数字
             for scalar in String(c).unicodeScalars {
                 intFromCharacter = Int(scalar.value)
@@ -83,7 +80,7 @@ class ValidateManager {
         return .ok(message: "用户名可用")
     }
 
-    func validatePassword(password: String) -> ValidationResult { // 密码验证
+    func validatePassword() -> ValidationResult { // 密码验证
         if password.count == 0 {
             return .empty
         }
