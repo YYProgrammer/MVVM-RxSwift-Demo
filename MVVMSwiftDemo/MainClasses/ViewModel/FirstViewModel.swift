@@ -14,11 +14,11 @@ extension ValidationResult { // 这个扩展定义在这里，因为它跟view�
     var textColor: UIColor {
         switch self {
         case .ok:
-            return UIColor.green
+            return .green
         case .empty:
-            return UIColor.black
+            return .clear
         case .failed:
-            return UIColor.red
+            return .red
         }
     }
 
@@ -44,7 +44,7 @@ class FirstViewModel {
     var password = Variable("") // 密码
     var passwordMessage: Variable<(isValid: Bool, str: String, color: UIColor)> = Variable((isValid: false, str: "", color: .clear)) // 密码验证提示信息
     var loginEnable = Variable(false)  // 按钮是否可以点击
-    var totalTipString = Variable("") // 总的提示文字
+    var totalTipString: Variable<(str: String, color: UIColor)> = Variable((str: "", color: .clear)) // 总的提示文字
     var loginTap = Variable(1) // 按钮点击信号
 
     init() {
@@ -77,12 +77,21 @@ class FirstViewModel {
         }
         .drive(onNext: { [unowned self] in
             self.loginEnable.value = $0.enable
-            self.totalTipString.value = $0.tipStr
+            self.totalTipString.value = (str: $0.tipStr, color: .red)
         })
         .disposed(by: disposeBag)
 
-        loginTap.asDriver().drive(onNext: { (value) in
-            print("按钮点击")
-        }).disposed(by: disposeBag)
+        loginTap.asDriver().skip(1)
+            .flatMapLatest{ [unowned self] _ in
+                return self.dataModel.doLogin().asDriver(onErrorJustReturn: false)
+            }
+            .drive(onNext: { [unowned self] in
+                if !$0 {
+                    self.totalTipString.value = (str: "登录失败", color: .red)
+                } else {
+                    self.totalTipString.value = (str: "登录成功", color: .green)
+                }
+            })
+            .disposed(by: disposeBag)
     }
 }

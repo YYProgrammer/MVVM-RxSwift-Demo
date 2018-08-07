@@ -35,7 +35,7 @@ class FirstViewController: UIViewController {
         let label = UILabel.init(frame: CGRect.init(x: 0, y: 0, width: kMainScreenWidth, height: 20.0))
         label.textColor = .red
         label.textAlignment = .center
-        label.font = UIFont.systemFont(ofSize: 12.0)
+        label.font = UIFont.systemFont(ofSize: 14.0)
         return label
     }()
 
@@ -91,7 +91,10 @@ class FirstViewController: UIViewController {
             .disposed(by: disposeBag)
 
         viewModel.totalTipString.asDriver()
-            .drive(totalTipLabel.rx.text)
+            .drive(onNext: { [unowned self] in
+                self.totalTipLabel.text = $0.str
+                self.totalTipLabel.textColor = $0.color
+            })
             .disposed(by: disposeBag)
 
         loginButton.rx.tap.asDriver()
