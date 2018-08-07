@@ -8,8 +8,11 @@
 
 import UIKit
 import RxSwift
+import RxCocoa
 
 class FirstViewController: UIViewController {
+
+    private let disposeBag = DisposeBag()
 
     // MARK: 界面组件
     private lazy var nameTextField: TipTextField = {
@@ -28,9 +31,16 @@ class FirstViewController: UIViewController {
         button.setBackgroundImage(UIImage.imageWithColor(color: UIAlphaColorFromRGB(hexValue: "FF6600", alpha: 0.5)), for: .disabled)
         return button
     }()
+    private lazy var totalTipLabel: UILabel = {
+        let label = UILabel.init(frame: CGRect.init(x: 0, y: 0, width: kMainScreenWidth, height: 20.0))
+        label.textColor = .red
+        label.textAlignment = .center
+        label.font = UIFont.systemFont(ofSize: 12.0)
+        return label
+    }()
 
     // MARK: viewModel
-    var viewModel: FirstViewModel?
+    private var viewModel: FirstViewModel = FirstViewModel.init()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,11 +49,55 @@ class FirstViewController: UIViewController {
         view.addSubview(nameTextField)
         view.addSubview(pwdTextField)
         view.addSubview(loginButton)
+        view.addSubview(totalTipLabel)
         // 布局子控件
         nameTextField.yy_y = STATUS_HEIGHT + 20.0
         pwdTextField.yy_y = nameTextField.yy_bottom + 10.0
         loginButton.yy_y = pwdTextField.yy_bottom + 40.0
+        totalTipLabel.yy_centerY = kMainScreenHeight * 0.5
         //绑定viewModel
-        viewModel = FirstViewModel.init(nameTextField: nameTextField, pwdTextField: pwdTextField, loginButton: loginButton)
+        viewModel.username.asDriver()
+            .drive(nameTextField.textField.rx.text)
+            .disposed(by: disposeBag)
+
+        nameTextField.textField.rx.text.orEmpty.asDriver()
+            .drive(viewModel.username)
+            .disposed(by: disposeBag)
+
+        viewModel.usernameMessage.asDriver()
+            .drive(onNext: { [unowned self] in
+                self.nameTextField.tipLabel.text = $0.str
+                self.nameTextField.tipLabel.textColor = $0.color
+            })
+            .disposed(by: disposeBag)
+
+        viewModel.password.asDriver()
+            .drive(pwdTextField.textField.rx.text)
+            .disposed(by: disposeBag)
+
+        pwdTextField.textField.rx.text.orEmpty.asDriver()
+            .drive(viewModel.password)
+            .disposed(by: disposeBag)
+        
+        viewModel.passwordMessage.asDriver()
+            .drive(onNext: { [unowned self] in
+                self.pwdTextField.tipLabel.text = $0.str
+                self.pwdTextField.tipLabel.textColor = $0.color
+            })
+            .disposed(by: disposeBag)
+
+        viewModel.loginEnable.asDriver()
+            .drive(loginButton.rx.isEnabled)
+            .disposed(by: disposeBag)
+
+        viewModel.totalTipString.asDriver()
+            .drive(totalTipLabel.rx.text)
+            .disposed(by: disposeBag)
+
+        loginButton.rx.tap.asDriver()
+            .drive(onNext: { [unowned self] in
+                self.viewModel.loginTap.value = 1
+            })
+            .disposed(by: disposeBag)
     }
 }

@@ -38,73 +38,51 @@ class FirstViewModel {
 
     private let dataModel: FirstDataModel = FirstDataModel()
     private let disposeBag = DisposeBag()
-    private var validatedUsername: Variable<ValidationResult> = Variable(.empty)
-    private var validatedPassword: Variable<ValidationResult> = Variable(.empty)
 
-    init(nameTextField: TipTextField, pwdTextField: TipTextField, loginButton: UIButton) {
+    var username = Variable("") // 用户名
+    var usernameMessage: Variable<(isValid: Bool, str: String, color: UIColor)> = Variable((isValid: false, str: "", color: .clear)) // 用户名验证提示信息
+    var password = Variable("") // 密码
+    var passwordMessage: Variable<(isValid: Bool, str: String, color: UIColor)> = Variable((isValid: false, str: "", color: .clear)) // 密码验证提示信息
+    var loginEnable = Variable(false)  // 按钮是否可以点击
+    var totalTipString = Variable("") // 总的提示文字
+    var loginTap = Variable(1) // 按钮点击信号
 
-        //姓名输入时，dataModel的userName随之变化，并检测合法性
-        nameTextField.textField.rx.text.orEmpty.asDriver()
-            .drive(onNext: { [unowned self] (userName) in
-                self.dataModel.userName = userName
-                self.validatedUsername.value = self.dataModel.validateUsername()
-            })
-            .disposed(by: disposeBag)
+    init() {
+        username.value = "test" // 测试，给输入框附一个初始值
+        password.value = "test" // 测试，给输入框附一个初始值
 
-        //密码输入时，dataModel的password随之变化，并检测合法性
-        pwdTextField.textField.rx.text.orEmpty.asDriver()
-            .drive(onNext: { [unowned self] (password) in
-                self.dataModel.password = password
-                self.validatedPassword.value = self.dataModel.validatePassword()
-            })
-            .disposed(by: disposeBag)
+        username.asDriver().drive(onNext: { [unowned self] (username) in
+            self.dataModel.userName = username
+            let result = self.dataModel.validateUsername()
+            self.usernameMessage.value = (isValid: result.isValid, str: result.description, color: result.textColor)
+        }).disposed(by: disposeBag)
 
-        //姓名合法性变化时，label展示效果随之变化
-        validatedUsername.asDriver()
-            .drive(nameTextField.tipLabel.rx.validationResult)
-            .disposed(by: disposeBag)
+        password.asDriver().drive(onNext: { [unowned self] (password) in
+            self.dataModel.password = password
+            let result = self.dataModel.validatePassword()
+            self.passwordMessage.value = (isValid: result.isValid, str: result.description, color: result.textColor)
+        }).disposed(by: disposeBag)
 
-        //密码合法性变化时，label展示效果随之变化
-        validatedPassword.asDriver()
-            .drive(pwdTextField.tipLabel.rx.validationResult)
-            .disposed(by: disposeBag)
-
-        //绑定姓名密码合法性结果，判断button能否点击
-        Driver.combineLatest(validatedUsername.asDriver(), validatedPassword.asDriver()) { username, password in
-                username.isValid && password.isValid
+        Driver.combineLatest(usernameMessage.asDriver(), passwordMessage.asDriver()) { (username, password) -> (enable: Bool, tipStr: String) in
+            var total: (enable: Bool, tipStr: String) = (enable: false, tipStr: "")
+            total.enable = username.isValid && password.isValid
+            if !username.isValid {
+                total.tipStr += username.str
+                total.tipStr += "  "
             }
-            .distinctUntilChanged()
-            .drive(loginButton.rx.isEnabled)
-            .disposed(by: disposeBag)
-
-        //button点击，绑定请求结果
-        loginButton.rx.tap.asDriver()
-            .flatMapLatest { [unowned self] _ in
-                return self.dataModel.doLogin().asDriver(onErrorJustReturn: false)
+            if !password.isValid {
+                total.tipStr += password.str
             }
-            .drive(loginButton.rx.loginResult)
-            .disposed(by: disposeBag)
-    }
-}
-
-extension Reactive where Base: UILabel {
-    var validationResult: Binder<ValidationResult> {
-        return Binder(base) { label, result in
-            label.textColor = result.textColor
-            label.text = result.description
+            return total
         }
-    }
-}
+        .drive(onNext: { [unowned self] in
+            self.loginEnable.value = $0.enable
+            self.totalTipString.value = $0.tipStr
+        })
+        .disposed(by: disposeBag)
 
-extension Reactive where Base: UIButton {
-    var loginResult: Binder<Bool> {
-        return Binder(base) { button, result in
-            if !result {
-                button.setTitle("登录失败，请重新登录", for: .normal)
-            } else {
-                button.setTitle("登录成功", for: .disabled)
-                button.isEnabled = false
-            }
-        }
+        loginTap.asDriver().drive(onNext: { (value) in
+            print("按钮点击")
+        }).disposed(by: disposeBag)
     }
 }
