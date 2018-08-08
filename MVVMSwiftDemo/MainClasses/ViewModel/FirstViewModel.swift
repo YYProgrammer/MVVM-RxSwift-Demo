@@ -45,7 +45,7 @@ class FirstViewModel {
     var passwordMessage: Variable<(isValid: Bool, str: String, color: UIColor)> = Variable((isValid: false, str: "", color: .clear)) // 密码验证提示信息
     var loginEnable = Variable(false)  // 按钮是否可以点击
     var totalTipString: Variable<(str: String, color: UIColor)> = Variable((str: "", color: .clear)) // 总的提示文字
-    var loginTap = Variable(1) // 按钮点击信号
+    var loginTap = Variable(Void.self) // 按钮点击信号
 
     init() {
         username.value = "test" // 测试，给输入框附一个初始值

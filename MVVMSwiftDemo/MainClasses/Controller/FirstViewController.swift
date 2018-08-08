@@ -99,7 +99,7 @@ class FirstViewController: UIViewController {
 
         loginButton.rx.tap.asDriver()
             .drive(onNext: { [unowned self] in
-                self.viewModel.loginTap.value = 1
+                self.viewModel.loginTap.value = Void.self
             })
             .disposed(by: disposeBag)
     }
