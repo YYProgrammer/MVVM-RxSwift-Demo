@@ -34,15 +34,17 @@ class FirstDataModel: NSObject {
 
     let minPasswordCount = 5 // 密码最少位数
 
-    func doLogin() -> Observable<Bool> { // 执行登录请求
+    func doLogin() -> Observable<ApiResult> { // 执行登录请求
+
         print(userName + "  " + password)
         return Observable.create({ (observer) -> Disposable in
             // 随便请求一个网站用于测试
-            Alamofire.request("http://www.baidu.com", method: .get, parameters: nil, encoding: JSONEncoding.default, headers: nil).response(completionHandler: { (response) in
+            Alamofire.request("http://www.baidu.com", method: .get, parameters: nil, encoding: JSONEncoding.default, headers: nil)
+                    .response(completionHandler: { (response) in
                 if let error = response.error {
-                    observer.onError(error)
+                    observer.onNext(ApiResult.failure(error))
                 } else {
-                    observer.onNext(true)
+                    observer.onNext(ApiResult.success())
                 }
                 observer.onCompleted()
             })
@@ -50,9 +52,9 @@ class FirstDataModel: NSObject {
         })
     }
 
-    func validateUsername() -> ValidationResult { // 用户名验证
+    func validateUsername() -> ApiResult { // 用户名验证
         if userName.count == 0 {
-            return .empty
+            return ApiResult.success()
         }
         var haveLetter = false
         var haveNumber = false
@@ -72,21 +74,21 @@ class FirstDataModel: NSObject {
             }
         }
         if !haveLetter {
-            return .failed(message: "用户名必须包含英文字母")
+            return ApiResult.failure("username_error", "用户名必须包含英文字母")
         }
         if !haveNumber {
-            return .failed(message: "用户名必须包含数字")
+            return ApiResult.failure("username_error", "用户名必须包含数字")
         }
-        return .ok(message: "用户名可用")
+        return ApiResult.success()
     }
 
-    func validatePassword() -> ValidationResult { // 密码验证
-        if password.count == 0 {
-            return .empty
+    func validatePassword() -> ApiResult { // 密码验证
+        if password.isEmpty {
+            return ApiResult.success()
+        } else if password.count < minPasswordCount {
+            return ApiResult.failure("password_length_error", "密码不得少于 \(minPasswordCount) 位")
+        } else {
+            return ApiResult.success()
         }
-        if password.count < minPasswordCount {
-            return .failed(message: "密码不得少于 \(minPasswordCount) 位")
-        }
-        return .ok(message: "密码可用")
     }
 }

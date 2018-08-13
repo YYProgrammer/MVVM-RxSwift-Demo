@@ -10,27 +10,25 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-extension ValidationResult { // 这个扩展定义在这里，因为它跟view层联系更紧密
-    var textColor: UIColor {
-        switch self {
-        case .ok:
-            return .green
-        case .empty:
-            return .clear
-        case .failed:
-            return .red
-        }
-    }
+//private extension ApiResult { // 这个扩展定义在这里，因为它跟view层联系更紧密
+//    var textColor: UIColor {
+//        if self.name == "password_empty" {
+//            return .clear
+//        } else if !self.isSuccess {
+//            return .red
+//        } else {
+//            return .green
+//        }
+//    }
+//}
 
-    var description: String {
-        switch self {
-        case let .ok(message):
-            return message
-        case .empty:
-            return ""
-        case let .failed(message):
-            return message
-        }
+private  func parseTextColor(_ input: String, _ validate: ApiResult) -> UIColor {
+    if(input.isEmpty) {
+        return .clear
+    } else if(validate.isSuccess) {
+        return .green
+    } else {
+        return .red
     }
 }
 
@@ -54,32 +52,32 @@ class FirstViewModel {
         username.asDriver().drive(onNext: { [unowned self] (username) in
             self.dataModel.userName = username
             let result = self.dataModel.validateUsername()
-            self.usernameMessage.value = (isValid: result.isValid, str: result.description, color: result.textColor)
+            self.usernameMessage.value = (isValid: result.isSuccess, str: result.message, color: parseTextColor(username, result))
         }).disposed(by: disposeBag)
 
         password.asDriver().drive(onNext: { [unowned self] (password) in
             self.dataModel.password = password
             let result = self.dataModel.validatePassword()
-            self.passwordMessage.value = (isValid: result.isValid, str: result.description, color: result.textColor)
+            self.passwordMessage.value = (isValid: result.isSuccess, str: result.message, color: parseTextColor(password, result))
         }).disposed(by: disposeBag)
 
         Driver.combineLatest(usernameMessage.asDriver(), passwordMessage.asDriver()) { (username, password) -> (enable: Bool, tipStr: String) in
-            var total: (enable: Bool, tipStr: String) = (enable: false, tipStr: "")
-            total.enable = username.isValid && password.isValid
-            if !username.isValid {
-                total.tipStr += username.str
-                total.tipStr += "  "
-            }
-            if !password.isValid {
-                total.tipStr += password.str
-            }
-            return total
-        }
-        .drive(onNext: { [unowned self] in
-            self.loginEnable.value = $0.enable
-            self.totalTipString.value = (str: $0.tipStr, color: .red)
-        })
-        .disposed(by: disposeBag)
+                    var total: (enable: Bool, tipStr: String) = (enable: false, tipStr: "")
+                    total.enable = username.isValid && password.isValid
+                    if !username.isValid {
+                        total.tipStr += username.str
+                        total.tipStr += "  "
+                    }
+                    if !password.isValid {
+                        total.tipStr += password.str
+                    }
+                    return total
+                }
+                .drive(onNext: { [unowned self] in
+                    self.loginEnable.value = $0.enable
+                    self.totalTipString.value = (str: $0.tipStr, color: .red)
+                })
+                .disposed(by: disposeBag)
 
 //        loginTap.asDriver().skip(1)
 //            .flatMapLatest{ [unowned self] _ in
@@ -96,8 +94,8 @@ class FirstViewModel {
     }
 
     func login() {
-        self.dataModel.doLogin().asDriver(onErrorJustReturn: false).drive(onNext: {[unowned self] b in
-            if b {
+        self.dataModel.doLogin().asDriver(onErrorJustReturn: ApiResult.UnhandledException).drive(onNext: { [unowned self] b in
+            if b.isSuccess {
                 self.totalTipString.value = (str: "登录成功", color: .green)
             } else {
                 self.totalTipString.value = (str: "登录失败", color: .red)
