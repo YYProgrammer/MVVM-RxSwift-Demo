@@ -81,17 +81,27 @@ class FirstViewModel {
         })
         .disposed(by: disposeBag)
 
-        loginTap.asDriver().skip(1)
-            .flatMapLatest{ [unowned self] _ in
-                return self.dataModel.doLogin().asDriver(onErrorJustReturn: false)
+//        loginTap.asDriver().skip(1)
+//            .flatMapLatest{ [unowned self] _ in
+//                return self.dataModel.doLogin().asDriver(onErrorJustReturn: false)
+//            }
+//            .drive(onNext: { [unowned self] in
+//                if !$0 {
+//                    self.totalTipString.value = (str: "登录失败", color: .red)
+//                } else {
+//                    self.totalTipString.value = (str: "登录成功", color: .green)
+//                }
+//            })
+//            .disposed(by: disposeBag)
+    }
+
+    func login() {
+        self.dataModel.doLogin().asDriver(onErrorJustReturn: false).drive(onNext: {[unowned self] b in
+            if b {
+                self.totalTipString.value = (str: "登录成功", color: .green)
+            } else {
+                self.totalTipString.value = (str: "登录失败", color: .red)
             }
-            .drive(onNext: { [unowned self] in
-                if !$0 {
-                    self.totalTipString.value = (str: "登录失败", color: .red)
-                } else {
-                    self.totalTipString.value = (str: "登录成功", color: .green)
-                }
-            })
-            .disposed(by: disposeBag)
+        })
     }
 }

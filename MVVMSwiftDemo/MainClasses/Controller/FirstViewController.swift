@@ -55,14 +55,18 @@ class FirstViewController: UIViewController {
         pwdTextField.yy_y = nameTextField.yy_bottom + 10.0
         loginButton.yy_y = pwdTextField.yy_bottom + 40.0
         totalTipLabel.yy_centerY = kMainScreenHeight * 0.5
-        //绑定viewModel
-        viewModel.username.asDriver()
-            .drive(nameTextField.textField.rx.text)
-            .disposed(by: disposeBag)
+//        //绑定viewModel
+//        viewModel.username.asDriver()
+//            .drive(nameTextField.textField.rx.text)
+//            .disposed(by: disposeBag)
+//
+//        nameTextField.textField.rx.text.orEmpty.asDriver()
+//            .drive(viewModel.username)
+//            .disposed(by: disposeBag)
 
-        nameTextField.textField.rx.text.orEmpty.asDriver()
-            .drive(viewModel.username)
-            .disposed(by: disposeBag)
+        //将用户名与textField做双向绑定
+        _ =  self.nameTextField.textField.rx.textInput <->  self.viewModel.username
+
 
         viewModel.usernameMessage.asDriver()
             .drive(onNext: { [unowned self] in
@@ -71,14 +75,18 @@ class FirstViewController: UIViewController {
             })
             .disposed(by: disposeBag)
 
-        viewModel.password.asDriver()
-            .drive(pwdTextField.textField.rx.text)
-            .disposed(by: disposeBag)
+//        viewModel.password.asDriver()
+//            .drive(pwdTextField.textField.rx.text)
+//            .disposed(by: disposeBag)
+//
+//        pwdTextField.textField.rx.text.orEmpty.asDriver()
+//            .drive(viewModel.password)
+//            .disposed(by: disposeBag)
 
-        pwdTextField.textField.rx.text.orEmpty.asDriver()
-            .drive(viewModel.password)
-            .disposed(by: disposeBag)
-        
+        //将密码与textField做双向绑定
+        _ =  self.pwdTextField.textField.rx.textInput <->  self.viewModel.password
+
+
         viewModel.passwordMessage.asDriver()
             .drive(onNext: { [unowned self] in
                 self.pwdTextField.tipLabel.text = $0.str
@@ -97,10 +105,14 @@ class FirstViewController: UIViewController {
             })
             .disposed(by: disposeBag)
 
-        loginButton.rx.tap.asDriver()
-            .drive(onNext: { [unowned self] in
-                self.viewModel.loginTap.value = Void.self
-            })
-            .disposed(by: disposeBag)
+//        loginButton.rx.tap.asDriver()
+//            .drive(onNext: { [unowned self] in
+//                self.viewModel.loginTap.value = Void.self
+//            })
+//            .disposed(by: disposeBag)
+
+        loginButton.rx.tap.asDriver().drive(onNext: { e in
+            self.viewModel.login()
+        })
     }
 }

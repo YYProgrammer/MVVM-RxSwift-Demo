@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		153A2064A06178733F04ADCB /* Pods_MVVMSwiftDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E8FC216A9DAD6A9220606A7 /* Pods_MVVMSwiftDemo.framework */; };
+		1B89BF7171E9839204D03451 /* RxOperators.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B89BA7459A719940F3EECEA /* RxOperators.swift */; };
 		BC1DF3952113FF8F00AAC190 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC1DF3942113FF8E00AAC190 /* AppDelegate.swift */; };
 		BC1DF39A211400A500AAC190 /* UIImage+YYCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC1DF397211400A500AAC190 /* UIImage+YYCategory.swift */; };
 		BC1DF39B211400A500AAC190 /* YYUtilsMacro.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC1DF398211400A500AAC190 /* YYUtilsMacro.swift */; };
@@ -22,6 +23,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1B89BA7459A719940F3EECEA /* RxOperators.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RxOperators.swift; sourceTree = "<group>"; };
 		1E8FC216A9DAD6A9220606A7 /* Pods_MVVMSwiftDemo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MVVMSwiftDemo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7CB1285F786289C42E5EE3AB /* Pods-MVVMSwiftDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MVVMSwiftDemo.release.xcconfig"; path = "Pods/Target Support Files/Pods-MVVMSwiftDemo/Pods-MVVMSwiftDemo.release.xcconfig"; sourceTree = "<group>"; };
 		BC1DF3942113FF8E00AAC190 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -74,6 +76,7 @@
 				BC1DF397211400A500AAC190 /* UIImage+YYCategory.swift */,
 				BC1DF398211400A500AAC190 /* YYUtilsMacro.swift */,
 				BC1DF399211400A500AAC190 /* UIView+YYExtension.swift */,
+				1B89BA7459A719940F3EECEA /* RxOperators.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -246,12 +249,14 @@
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-MVVMSwiftDemo/Pods-MVVMSwiftDemo-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
+				"${BUILT_PRODUCTS_DIR}/PromiseKit/PromiseKit.framework",
 				"${BUILT_PRODUCTS_DIR}/RxCocoa/RxCocoa.framework",
 				"${BUILT_PRODUCTS_DIR}/RxSwift/RxSwift.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PromiseKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxCocoa.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxSwift.framework",
 			);
@@ -293,6 +298,7 @@
 				BC1DF3AC211400D000AAC190 /* FirstViewController.swift in Sources */,
 				BC1DF3AB211400D000AAC190 /* TipTextField.swift in Sources */,
 				BC1DF39C211400A500AAC190 /* UIView+YYExtension.swift in Sources */,
+				1B89BF7171E9839204D03451 /* RxOperators.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
